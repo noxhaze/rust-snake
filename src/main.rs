@@ -1,3 +1,5 @@
+use logic::snake::Snake;
+use logic::transform;
 use std::{thread::sleep, time::Duration};
 
 mod logic;
@@ -8,12 +10,12 @@ fn main() {
     let height: u32 = 10;
 
     let mut grid: logic::Grid = logic::Grid::new(width, height);
-    let mut snake: logic::Snake = logic::Snake::new(
-        logic::Position {
+    let mut snake: Snake = Snake::new(
+        transform::Position {
             x: width / 2,
             y: height / 2,
         },
-        logic::Direction::Down,
+        transform::Direction::Down,
     );
 
     loop {
