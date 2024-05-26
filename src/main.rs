@@ -18,6 +18,6 @@ fn main() {
         renderer::render(&grid);
 
         grid.update(&snake);
-        snake.update();
+        snake.update(width, height);
     }
 }
