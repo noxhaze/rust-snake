@@ -17,11 +17,14 @@ fn main() {
         },
         transform::Direction::Down,
     );
+    let mut food: logic::Food = logic::Food {
+        pos: grid.random_pos(),
+    };
 
     loop {
         renderer::render(&grid);
 
-        grid.update(&snake);
+        grid.update(&snake, &food);
         snake.update(width, height);
 
         sleep(Duration::from_millis(250));
