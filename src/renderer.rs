@@ -4,8 +4,15 @@ pub const FOOD: char = '@';
 
 use crate::logic;
 
-pub fn render(grid: &logic::Grid) {
-    for x in 0..=grid.width {
-        for y in 0..=grid.height {}
+pub fn render(grid: &mut logic::Grid) {
+    let mut output: String = String::new();
+
+    for iter in grid.array.rows_iter() {
+        for element in iter {
+            output.push(*element);
+        }
+        output.push('\n');
     }
+
+    println!("{}", output);
 }
