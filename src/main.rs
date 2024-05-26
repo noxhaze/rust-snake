@@ -1,3 +1,5 @@
+use std::{thread::sleep, time::Duration};
+
 mod logic;
 mod renderer;
 
@@ -19,5 +21,7 @@ fn main() {
 
         grid.update(&snake);
         snake.update(width, height);
+
+        sleep(Duration::from_millis(250));
     }
 }
