@@ -82,7 +82,7 @@ impl Snake {
                 }
 
                 node.x = Snake::wrap_value(node.x, 0, width);
-                node.y = Snake::wrap_value(node.y, 0, width);
+                node.y = Snake::wrap_value(node.y, 0, height);
             } else {
                 *node = old_pos;
             }
