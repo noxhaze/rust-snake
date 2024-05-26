@@ -1,3 +1,6 @@
+mod logic;
+mod renderer;
+
 fn main() {
-    println!("Hello, world!");
+    let mut grid: logic::Grid = logic::Grid::new(10, 10);
 }
