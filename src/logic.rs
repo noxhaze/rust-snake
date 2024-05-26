@@ -8,6 +8,21 @@ pub struct Grid {
 }
 
 impl Grid {
+    pub fn update(&mut self, snake: &Snake) {
+        self.array = Array2D::filled_by_row_major(
+            || renderer::BLANK,
+            self.width.try_into().unwrap(),
+            self.height.try_into().unwrap(),
+        );
+
+        for node in snake.nodes.iter() {
+            *self
+                .array
+                .get_mut(node.x.try_into().unwrap(), node.y.try_into().unwrap())
+                .expect("Out of bounds access of grid") = renderer::SNAKE;
+        }
+    }
+
     pub fn new(width: u32, height: u32) -> Self {
         Self {
             width,
@@ -29,8 +44,8 @@ pub enum Direction {
 }
 
 pub struct Position {
-    x: u32,
-    y: u32,
+    pub x: u32,
+    pub y: u32,
 }
 
 impl PartialEq for Position {
@@ -49,7 +64,7 @@ impl Clone for Position {
 }
 
 pub struct Snake {
-    nodes: Vec<Position>,
+    pub nodes: Vec<Position>,
     pub dir: Direction,
 }
 
