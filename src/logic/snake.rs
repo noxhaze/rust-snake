@@ -11,6 +11,8 @@ impl Snake {
         let first_node = self.nodes.first().unwrap().clone();
         for node in self.nodes.iter_mut() {
             if *node == first_node {
+                old_pos = node.clone();
+
                 match self.dir {
                     Direction::Left => node.x -= 1,
                     Direction::Right => node.x += 1,
@@ -22,9 +24,8 @@ impl Snake {
                 node.y = Snake::wrap_value(node.y, 0, height);
             } else {
                 *node = old_pos;
+                old_pos = node.clone();
             }
-
-            old_pos = node.clone();
         }
     }
 
@@ -40,7 +41,7 @@ impl Snake {
 
     pub fn new(start_pos: Position, start_dir: Direction) -> Self {
         Self {
-            nodes: vec![start_pos],
+            nodes: vec![start_pos, Position { x: 4, y: 5 }],
             dir: start_dir,
         }
     }
