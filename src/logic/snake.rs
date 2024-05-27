@@ -9,25 +9,20 @@ pub struct Snake {
 
 impl Snake {
     pub fn update(&mut self, width: u32, height: u32) {
-        let mut old_pos: Position = Position { x: 0, y: 0 };
-        let first_node = self.nodes.first().unwrap().clone();
-        for node in self.nodes.iter_mut() {
-            if *node == first_node {
-                old_pos = node.clone();
+        let head = self.nodes.get_mut(0).unwrap();
+        let mut old_pos = head.clone();
+        match self.dir {
+            Direction::Left => head.x -= 1,
+            Direction::Right => head.x += 1,
+            Direction::Up => head.y -= 1,
+            Direction::Down => head.y += 1,
+        };
+        head.x = Snake::wrap_value(head.x, 0, width);
+        head.y = Snake::wrap_value(head.y, 0, height);
 
-                match self.dir {
-                    Direction::Left => node.x -= 1,
-                    Direction::Right => node.x += 1,
-                    Direction::Up => node.y -= 1,
-                    Direction::Down => node.y += 1,
-                };
-
-                node.x = Snake::wrap_value(node.x, 0, width);
-                node.y = Snake::wrap_value(node.y, 0, height);
-            } else {
-                *node = old_pos;
-                old_pos = node.clone();
-            }
+        for node in self.nodes[1..].iter_mut() {
+            *node = old_pos;
+            old_pos = node.clone();
         }
     }
 
