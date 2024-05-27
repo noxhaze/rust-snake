@@ -35,6 +35,7 @@ fn main() {
                 _ => continue,
             };
         }
+
         if *snake.nodes.get(0).unwrap() == food.pos {
             food.pos = grid.random_pos();
             snake.increase_length();

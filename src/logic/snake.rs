@@ -31,6 +31,19 @@ impl Snake {
         }
     }
 
+    pub fn check_self_collisions(&self) -> bool {
+        let mut res: bool = false;
+        let head_pos: &Position = self.nodes.get(0).unwrap();
+
+        for node in self.nodes[1..].iter() {
+            if node == head_pos {
+                res = true;
+            }
+        }
+
+        res
+    }
+
     pub fn increase_length(&mut self) {
         let last = self.nodes.last().unwrap();
 
