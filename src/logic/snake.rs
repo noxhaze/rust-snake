@@ -20,7 +20,7 @@ impl Snake {
                     Direction::Right => node.x += 1,
                     Direction::Up => node.y -= 1,
                     Direction::Down => node.y += 1,
-                }
+                };
 
                 node.x = Snake::wrap_value(node.x, 0, width);
                 node.y = Snake::wrap_value(node.y, 0, height);

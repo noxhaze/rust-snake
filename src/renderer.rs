@@ -10,7 +10,7 @@ pub fn render(grid: &logic::Grid) {
 
     let mut output: String = String::new();
 
-    for iter in grid.array.rows_iter() {
+    for iter in grid.array.columns_iter() {
         for element in iter {
             output.push(*element);
         }
