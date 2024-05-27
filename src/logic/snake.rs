@@ -1,5 +1,3 @@
-use core::panic;
-
 use crate::logic::transform::{Direction, Position};
 
 pub struct Snake {
@@ -24,9 +22,11 @@ impl Snake {
             *node = old_pos;
             old_pos = node.clone();
         }
+
+        self.check_self_collisions();
     }
 
-    pub fn check_self_collisions(&self) -> bool {
+    fn check_self_collisions(&self) -> bool {
         let mut res: bool = false;
         let head_pos: &Position = self.nodes.get(0).unwrap();
 
@@ -52,24 +52,7 @@ impl Snake {
     }
 
     fn dir(first: &Position, second: &Position) -> Direction {
-        let x: i32 = TryInto::<i32>::try_into(first.x).unwrap()
-            - TryInto::<i32>::try_into(second.x).unwrap();
-        let y: i32 = TryInto::<i32>::try_into(first.y).unwrap()
-            - TryInto::<i32>::try_into(second.y).unwrap();
-
-        if x != 0 {
-            match x {
-                -1 => Direction::Left,
-                1 => Direction::Right,
-                _ => panic!("Unaccounted direction calcuation"),
-            }
-        } else {
-            match y {
-                -1 => Direction::Up,
-                1 => Direction::Down,
-                _ => panic!("Unaccounted direction calcuation"),
-            }
-        }
+        todo!("Calculating direction function was previously broken entirely")
     }
 
     fn follow(pos: &Position, dir: &Direction) -> Position {
