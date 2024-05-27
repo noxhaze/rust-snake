@@ -1,3 +1,5 @@
+use core::panic;
+
 use crate::logic::transform::{Direction, Position};
 
 pub struct Snake {
@@ -29,6 +31,60 @@ impl Snake {
         }
     }
 
+    pub fn increase_length(&mut self) {
+        let last = self.nodes.last().unwrap();
+
+        if self.nodes.len() == 1 {
+            self.nodes.push(Snake::follow(&last, &self.dir));
+        } else {
+            let second_last = self.nodes.get(self.nodes.len() - 2).unwrap();
+            let dir = Snake::dir(second_last, last);
+            self.nodes.push(Snake::follow(&last, &dir));
+        }
+    }
+
+    fn dir(first: &Position, second: &Position) -> Direction {
+        let x: i32 = TryInto::<i32>::try_into(first.x).unwrap()
+            - TryInto::<i32>::try_into(second.x).unwrap();
+        let y: i32 = TryInto::<i32>::try_into(first.y).unwrap()
+            - TryInto::<i32>::try_into(second.y).unwrap();
+
+        if x != 0 {
+            match x {
+                -1 => Direction::Left,
+                1 => Direction::Right,
+                _ => panic!("Unaccounted direction calcuation"),
+            }
+        } else {
+            match y {
+                -1 => Direction::Up,
+                1 => Direction::Down,
+                _ => panic!("Unaccounted direction calcuation"),
+            }
+        }
+    }
+
+    fn follow(pos: &Position, dir: &Direction) -> Position {
+        match dir {
+            Direction::Left => Position {
+                x: pos.x + 1,
+                y: pos.y,
+            },
+            Direction::Right => Position {
+                x: pos.x - 1,
+                y: pos.y,
+            },
+            Direction::Down => Position {
+                x: pos.x,
+                y: pos.y - 1,
+            },
+            Direction::Up => Position {
+                x: pos.x,
+                y: pos.y + 1,
+            },
+        }
+    }
+
     fn wrap_value(val: u32, min: u32, max: u32) -> u32 {
         if val <= min {
             max - 1
@@ -41,7 +97,7 @@ impl Snake {
 
     pub fn new(start_pos: Position, start_dir: Direction) -> Self {
         Self {
-            nodes: vec![start_pos, Position { x: 4, y: 5 }],
+            nodes: vec![start_pos],
             dir: start_dir,
         }
     }

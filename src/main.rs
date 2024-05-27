@@ -18,10 +18,16 @@ fn main() {
         transform::Direction::Down,
     );
     let mut food: logic::Food = logic::Food {
-        pos: grid.random_pos(),
+        pos: transform::Position { x: 1, y: 5 },
     };
 
     loop {
+        if *snake.nodes.get(0).unwrap() == food.pos {
+            food.pos = grid.random_pos();
+            snake.increase_length();
+        }
+        food.pos = grid.random_pos();
+
         renderer::render(&grid);
 
         grid.update(&snake, &food);
