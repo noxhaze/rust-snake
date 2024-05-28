@@ -25,6 +25,8 @@ fn main() {
     };
 
     loop {
+        renderer::render(&grid);
+
         let pressed = device_state.get_keys();
         for key in pressed.iter() {
             snake.dir = match key {
@@ -43,8 +45,6 @@ fn main() {
 
         snake.update(width, height);
         grid.update(&snake, &food);
-
-        renderer::render(&grid);
 
         sleep(Duration::from_millis(DELAY));
     }

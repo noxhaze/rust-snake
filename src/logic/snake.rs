@@ -18,7 +18,7 @@ impl Snake {
         head.x = Snake::wrap_value(head.x, 0, width);
         head.y = Snake::wrap_value(head.y, 0, height);
 
-        for node in self.nodes[1..].iter_mut() {
+        for node in self.nodes.iter_mut().skip(1) {
             *node = old_pos;
             old_pos = node.clone();
         }
@@ -30,7 +30,7 @@ impl Snake {
         let mut res: bool = false;
         let head_pos: &Position = self.nodes.get(0).unwrap();
 
-        for node in self.nodes[1..].iter() {
+        for node in self.nodes.iter().skip(1) {
             if node == head_pos {
                 res = true;
             }
@@ -45,9 +45,7 @@ impl Snake {
         if self.nodes.len() == 1 {
             self.nodes.push(Snake::follow(&last, &self.dir));
         } else {
-            let second_last = self.nodes.get(self.nodes.len() - 2).unwrap();
-            let dir = Snake::dir(second_last, last);
-            self.nodes.push(Snake::follow(&last, &dir));
+            self.nodes.push(Snake::follow(&last, &self.dir));
         }
     }
 
@@ -87,8 +85,18 @@ impl Snake {
     }
 
     pub fn new(start_pos: Position, start_dir: Direction) -> Self {
+        let second_node: Position = Position {
+            x: start_pos.x,
+            y: start_pos.y - 1,
+        };
+
+        let third_node: Position = Position {
+            x: start_pos.x,
+            y: start_pos.y - 2,
+        };
+
         Self {
-            nodes: vec![start_pos],
+            nodes: vec![start_pos, second_node, third_node],
             dir: start_dir,
         }
     }
