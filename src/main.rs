@@ -29,13 +29,17 @@ fn main() {
 
         let pressed = device_state.get_keys();
         for key in pressed.iter() {
-            snake.dir = match key {
+            let new_dir = match key {
                 device_query::Keycode::A => transform::Direction::Left,
                 device_query::Keycode::S => transform::Direction::Down,
                 device_query::Keycode::W => transform::Direction::Up,
                 device_query::Keycode::D => transform::Direction::Right,
                 _ => continue,
             };
+
+            if new_dir != snake.dir.opposite() {
+                snake.dir = new_dir;
+            }
         }
 
         if *snake.nodes.get(0).unwrap() == food.pos {
