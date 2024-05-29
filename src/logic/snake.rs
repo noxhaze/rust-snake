@@ -1,3 +1,5 @@
+use core::panic;
+
 use crate::logic::transform::{Direction, Position};
 
 pub struct Snake {
@@ -7,8 +9,9 @@ pub struct Snake {
 
 impl Snake {
     pub fn update(&mut self, width: u32, height: u32) {
+        let old: Vec<Position> = self.nodes.clone();
         let head = self.nodes.get_mut(0).unwrap();
-        let mut old_pos = head.clone();
+
         match self.dir {
             Direction::Left => head.x -= 1,
             Direction::Right => head.x += 1,
@@ -18,12 +21,15 @@ impl Snake {
         head.x = Snake::wrap_value(head.x, 0, width);
         head.y = Snake::wrap_value(head.y, 0, height);
 
+        let mut i: usize = 0;
         for node in self.nodes.iter_mut().skip(1) {
-            *node = old_pos;
-            old_pos = node.clone();
+            *node = old.get(i).unwrap().clone();
+            i += 1;
         }
 
-        self.check_self_collisions();
+        if self.check_self_collisions() {
+            panic!("You Lost!");
+        }
     }
 
     fn check_self_collisions(&self) -> bool {
@@ -90,13 +96,8 @@ impl Snake {
             y: start_pos.y - 1,
         };
 
-        let third_node: Position = Position {
-            x: start_pos.x,
-            y: start_pos.y - 2,
-        };
-
         Self {
-            nodes: vec![start_pos, second_node, third_node],
+            nodes: vec![start_pos, second_node],
             dir: start_dir,
         }
     }
