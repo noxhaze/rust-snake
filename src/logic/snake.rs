@@ -1,6 +1,7 @@
 use core::panic;
 
 use crate::logic::transform::{Direction, Position};
+use device_query::{self, Keycode};
 
 pub struct Snake {
     pub nodes: Vec<Position>,
@@ -32,6 +33,20 @@ impl Snake {
         }
     }
 
+    pub fn handle_input(&mut self, key: Keycode) {
+        let new_dir = match key {
+            device_query::Keycode::A => Direction::Left,
+            device_query::Keycode::S => Direction::Down,
+            device_query::Keycode::W => Direction::Up,
+            device_query::Keycode::D => Direction::Right,
+            _ => return,
+        };
+
+        if new_dir != self.dir.opposite() {
+            self.dir = new_dir;
+        }
+    }
+
     fn check_self_collisions(&self) -> bool {
         let mut res: bool = false;
         let head_pos: &Position = self.nodes.get(0).unwrap();
@@ -53,10 +68,6 @@ impl Snake {
         } else {
             self.nodes.push(Snake::follow(&last, &self.dir));
         }
-    }
-
-    fn dir(first: &Position, second: &Position) -> Direction {
-        todo!("Calculating direction function was previously broken entirely")
     }
 
     fn follow(pos: &Position, dir: &Direction) -> Position {
