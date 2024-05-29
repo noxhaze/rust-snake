@@ -6,7 +6,7 @@ use std::{thread::sleep, time::Duration};
 mod logic;
 mod renderer;
 
-fn main() {
+fn main() -> ! {
     const DELAY: u64 = 100;
     let width: u32 = 25;
     let height: u32 = 10;
@@ -25,21 +25,8 @@ fn main() {
     };
 
     loop {
-        renderer::render(&grid);
-
-        let pressed = device_state.get_keys();
-        for key in pressed.iter() {
-            let new_dir = match key {
-                device_query::Keycode::A => transform::Direction::Left,
-                device_query::Keycode::S => transform::Direction::Down,
-                device_query::Keycode::W => transform::Direction::Up,
-                device_query::Keycode::D => transform::Direction::Right,
-                _ => continue,
-            };
-
-            if new_dir != snake.dir.opposite() {
-                snake.dir = new_dir;
-            }
+        if let Some(val) = device_state.get_keys().get(0) {
+            snake.handle_input(*val);
         }
 
         if *snake.nodes.get(0).unwrap() == food.pos {
@@ -49,6 +36,7 @@ fn main() {
 
         snake.update(width, height);
         grid.update(&snake, &food);
+        renderer::render(&grid);
 
         sleep(Duration::from_millis(DELAY));
     }
